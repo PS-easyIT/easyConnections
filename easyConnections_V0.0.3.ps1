@@ -439,7 +439,7 @@ $xamlContent = @"
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="easyConnections v0.0.3 • Network Monitor • B2B Edition" 
+                <TextBlock Grid.Column="0" Text="easyConnections v0.0.3 • Network Monitor • GitHub Edition" 
                           Foreground="#999999" FontSize="10" FontFamily="Segoe UI" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="1" Text="Powered by Andreas Hepp | www.phinit.de" Foreground="#0078D4" FontSize="10" FontWeight="SemiBold" FontFamily="Segoe UI"/>
             </Grid>
