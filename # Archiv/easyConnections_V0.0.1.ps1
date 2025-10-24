@@ -11,7 +11,7 @@ $xamlContent = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="easyConnections - Network Connections Monitor"
+    Title="easyConnections - Network Monitor"
     Width="1200"
     Height="800"
     WindowStartupLocation="CenterScreen"

@@ -8,45 +8,53 @@ Add-Type -AssemblyName PresentationCore
 Add-Type -AssemblyName WindowsBase
 Add-Type -AssemblyName System.Windows.Forms
 
-# XAML Content mit farblicher Trennung
+# XAML Content mit Windows 11 Fluent Design
 $xamlContent = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="easyConnections - Network Connections Monitor"
-    Width="1600"
-    Height="900"
+    Title="easyConnections - Network Monitor"
+    Width="1400"
+    Height="950"
     WindowStartupLocation="CenterScreen"
     ResizeMode="CanResize"
-    MinWidth="1100"
-    MinHeight="600"
-    Background="#F3F3F3"
-    WindowStyle="SingleBorderWindow">
+    MinWidth="1300"
+    MinHeight="800"
+    Background="#FFFBF9"
+    WindowStyle="SingleBorderWindow"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType"
+    UseLayoutRounding="True">
 
     <Window.Resources>
+        <!-- Modern Fluent Button Style -->
         <Style x:Key="ModernButton" TargetType="Button">
             <Setter Property="Background" Value="#0078D4"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="20,8"/>
+            <Setter Property="Padding" Value="20,10"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                                CornerRadius="4"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                BorderBrush="{TemplateBinding BorderBrush}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                CornerRadius="6"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#106EBE"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Background" Value="#005A9E"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -54,14 +62,191 @@ $xamlContent = @"
             </Setter>
         </Style>
 
+        <Style x:Key="ModernButtonAkt" TargetType="Button">
+            <Setter Property="Background" Value="#36913a"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#106EBE"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#005A9E"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Accent Button Style -->
+        <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#0078D4"/>
+        </Style>
+
+        <!-- Subtle Button Style -->
+        <Style x:Key="SubtleButton" TargetType="Button">
+            <Setter Property="Background" Value="#ffbeb5"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="18,9"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E8E8E8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#D8D8D8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton Name="ToggleButton" Grid.Column="2" 
+                                         ClickMode="Press" Focusable="False"
+                                         IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                         Template="{DynamicResource ComboBoxToggleButtonTemplate}"/>
+                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False" 
+                                            Content="{TemplateBinding SelectionBoxItem}"
+                                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                            VerticalAlignment="Center" HorizontalAlignment="Left" Margin="12,0,0,0"/>
+                            <TextBox x:Name="PART_EditableTextBox"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Margin="3,0,0,0"
+                                    Focusable="True"
+                                    Background="Transparent"
+                                    Visibility="Hidden"
+                                    Foreground="{TemplateBinding Foreground}"/>
+                            <Popup Name="Popup"
+                                  Placement="Bottom"
+                                  IsOpen="{TemplateBinding IsDropDownOpen}"
+                                  AllowsTransparency="True"
+                                  Focusable="False"
+                                  PopupAnimation="Slide">
+                                <Border Name="DropDownBorder"
+                                       Background="#FFFFFF"
+                                       BorderThickness="1"
+                                       BorderBrush="#E0E0E0"
+                                       CornerRadius="6"
+                                       MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <ScrollViewer SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern CheckBox Style -->
+        <Style x:Key="ModernCheckBox" TargetType="CheckBox">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="18" Height="18" CornerRadius="4"
+                                   Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="1"
+                                   Margin="0,0,8,0">
+                                <Canvas x:Name="CheckMark" Visibility="Collapsed">
+                                    <Polyline Points="2,8 6,12 14,4" Stroke="#0078D4" StrokeThickness="2"/>
+                                </Canvas>
+                            </Border>
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- DataGrid Header Style -->
+        <Style x:Key="ModernDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F3F3F3"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+
         <!-- DataGrid Row Style with Color Coding -->
         <Style x:Key="ColoredDataGridRowStyle" TargetType="DataGridRow">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
             <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F5F5F5"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E3F2FD"/>
+                </Trigger>
                 <DataTrigger Binding="{Binding CategoryColor}" Value="Web">
                     <Setter Property="Background" Value="#E3F2FD"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding CategoryColor}" Value="Email">
-                    <Setter Property="Background" Value="#FFE0B2"/>
+                    <Setter Property="Background" Value="#FFF3E0"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding CategoryColor}" Value="Database">
                     <Setter Property="Background" Value="#E8F5E9"/>
@@ -70,7 +255,7 @@ $xamlContent = @"
                     <Setter Property="Background" Value="#F3E5F5"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding CategoryColor}" Value="RemoteAccess">
-                    <Setter Property="Background" Value="#FFEBEE"/>
+                    <Setter Property="Background" Value="#FCE4EC"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding CategoryColor}" Value="FileServices">
                     <Setter Property="Background" Value="#FFFDE7"/>
@@ -83,117 +268,181 @@ $xamlContent = @"
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <!-- Modern DataGrid Style -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#F0F0F0"/>
+        </Style>
+
+        <!-- Section Header Style -->
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#0F0F0F"/>
+        </Style>
     </Window.Resources>
 
-    <Grid Margin="10">
+    <Grid Margin="12">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            <Button x:Name="btnRefresh" Content="Aktualisieren" Style="{StaticResource ModernButton}" Margin="0,0,10,0"/>
-            <ComboBox x:Name="cmbProtocol" Width="180" Margin="0,0,10,0">
-                <ComboBoxItem Content="Alle" IsSelected="True"/>
-                <ComboBoxItem Content="HTTP"/>
-                <ComboBoxItem Content="HTTPS"/>
-                <ComboBoxItem Content="FTP"/>
-                <ComboBoxItem Content="FTPS"/>
-                <ComboBoxItem Content="SMTP"/>
-                <ComboBoxItem Content="POP3"/>
-                <ComboBoxItem Content="IMAP"/>
-                <ComboBoxItem Content="DNS"/>
-                <ComboBoxItem Content="DHCP"/>
-                <ComboBoxItem Content="LDAP"/>
-                <ComboBoxItem Content="LDAPS"/>
-                <ComboBoxItem Content="SSH"/>
-                <ComboBoxItem Content="Telnet"/>
-                <ComboBoxItem Content="RDP"/>
-                <ComboBoxItem Content="SMB/CIFS"/>
-                <ComboBoxItem Content="NFS"/>
-                <ComboBoxItem Content="SNMP"/>
-                <ComboBoxItem Content="NTP"/>
-                <ComboBoxItem Content="Kerberos"/>
-                <ComboBoxItem Content="WinRM"/>
-                <ComboBoxItem Content="PowerShell"/>
-                <ComboBoxItem Content="SQL Server"/>
-                <ComboBoxItem Content="MySQL"/>
-                <ComboBoxItem Content="PostgreSQL"/>
-                <ComboBoxItem Content="Oracle"/>
-                <ComboBoxItem Content="MongoDB"/>
-                <ComboBoxItem Content="Redis"/>
-                <ComboBoxItem Content="VNC"/>
-                <ComboBoxItem Content="TeamViewer"/>
-                <ComboBoxItem Content="Syslog"/>
-                <ComboBoxItem Content="RADIUS"/>
-                <ComboBoxItem Content="TACACS+"/>
-                <ComboBoxItem Content="NetBIOS"/>
-                <ComboBoxItem Content="AD Replication"/>
-                <ComboBoxItem Content="Exchange"/>
-                <ComboBoxItem Content="Hyper-V"/>
-                <ComboBoxItem Content="VMware"/>
+        <!-- Main Actions Row -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10" Background="Transparent" VerticalAlignment="Center">
+            <Button x:Name="btnRefresh" Content="🔄 Aktualisieren" Style="{StaticResource ModernButtonAkt}" Margin="0,0,10,0" Width="155" Height="40" ToolTip="Verbindungsliste aktualisieren"/>
+            <Button x:Name="btnStartRecording" Content="⏺️ Aufzeichnung" Style="{StaticResource ModernButton}" Margin="0,0,10,0" Width="155" Height="40" ToolTip="Verbindungen aufzeichnen"/>
+            <Button x:Name="btnExportHTML" Content="📊 HTML Export" Style="{StaticResource ModernButton}" Margin="0,0,20,0" Width="155" Height="40" ToolTip="Verbindungen als HTML exportieren"/>
+            
+            <TextBlock Text="🎯 Presets:" Style="{StaticResource SectionHeader}" VerticalAlignment="Center" Margin="100,0,10,0"/>
+            <ComboBox x:Name="cmbPresets" Width="220" Margin="0,0,8,0" Style="{StaticResource ModernComboBox}" Height="36" ToolTip="Filter-Presets laden">
+                <ComboBoxItem Content="-- Neues Preset --" IsSelected="True"/>
             </ComboBox>
-            <ComboBox x:Name="cmbDirection" Width="100" Margin="0,0,10,0">
-                <ComboBoxItem Content="Beide" IsSelected="True"/>
-                <ComboBoxItem Content="Eingehend"/>
-                <ComboBoxItem Content="Ausgehend"/>
-            </ComboBox>
-            <ComboBox x:Name="cmbCategory" Width="125" Margin="0,0,10,0">
-                <ComboBoxItem Content="Alle Kategorien" IsSelected="True"/>
-                <ComboBoxItem Content="Web Services"/>
-                <ComboBoxItem Content="Email Services"/>
-                <ComboBoxItem Content="Database Services"/>
-                <ComboBoxItem Content="Directory Services"/>
-                <ComboBoxItem Content="Remote Access"/>
-                <ComboBoxItem Content="File Services"/>
-                <ComboBoxItem Content="Monitoring"/>
-                <ComboBoxItem Content="Virtualization"/>
-            </ComboBox>
-            <ComboBox x:Name="cmbNetworkType" Width="140" Margin="0,0,10,0">
-                <ComboBoxItem Content="Alle Netzwerke" IsSelected="True"/>
-                <ComboBoxItem Content="Nur Private"/>
-                <ComboBoxItem Content="Nur Public"/>
-            </ComboBox>
-            <ComboBox x:Name="cmbTCPUDP" Width="120" Margin="0,0,10,0">
-                <ComboBoxItem Content="TCP + UDP" IsSelected="True"/>
-                <ComboBoxItem Content="Nur TCP"/>
-                <ComboBoxItem Content="Nur UDP"/>
-            </ComboBox>
-            <CheckBox x:Name="chkShowProcessInfo" Content="Prozessinfo anzeigen" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="False" Foreground="#333333"/>
-            <Button x:Name="btnStartRecording" Content="Aufzeichnung starten" Style="{StaticResource ModernButton}" Margin="0,0,10,0"/>
-            <Button x:Name="btnExportHTML" Content="HTML Export" Style="{StaticResource ModernButton}"/>
+            <Button x:Name="btnLoadPreset" Content="📂 Laden" Style="{StaticResource ModernButton}" Width="100" Height="36" Margin="0,0,6,0" ToolTip="Ausgewähltes Preset laden"/>
+            <Button x:Name="btnSavePreset" Content="💾 Speichern" Style="{StaticResource ModernButton}" Width="140" Height="36" Margin="0,0,6,0" ToolTip="Aktuelle Filter als Preset speichern"/>
+            <Button x:Name="btnDeletePreset" Content="🗑️ Löschen" Style="{StaticResource SubtleButton}" Width="110" Height="36"  Margin="80,0,6,0" ToolTip="Preset löschen"/>
         </StackPanel>
 
-        <DataGrid x:Name="dgConnections" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" RowStyle="{StaticResource ColoredDataGridRowStyle}">
+        <!-- Filter Row 1: Network & Protocol Filters with ScrollBar -->
+        <Border Grid.Row="1" Background="#F8F8F8" BorderBrush="#E5E5E5" BorderThickness="0,1,0,1" Padding="12,12,12,12" Margin="-12,0,-12,0">
+            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" PanningMode="HorizontalOnly">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🔍 Filter:" Style="{StaticResource SectionHeader}" VerticalAlignment="Center" Margin="0,0,15,0" MinWidth="60"/>
+                    
+                    <TextBlock Text="Netzwerk:" FontSize="11" FontWeight="SemiBold" Foreground="#333333" VerticalAlignment="Center" Margin="0,0,8,0" MinWidth="70"/>
+                    <ComboBox x:Name="cmbNetworkType" Width="140" Margin="0,0,15,0" Style="{StaticResource ModernComboBox}" Height="34" ToolTip="Netzwerk-Typ filtern">
+                        <ComboBoxItem Content="Alle Netzwerke" IsSelected="True"/>
+                        <ComboBoxItem Content="Nur Private"/>
+                        <ComboBoxItem Content="Nur Public"/>
+                    </ComboBox>
+                    
+                    <TextBlock Text="Protokoll:" FontSize="11" FontWeight="SemiBold" Foreground="#333333" VerticalAlignment="Center" Margin="0,0,8,0" MinWidth="70"/>
+                    <ComboBox x:Name="cmbTCPUDP" Width="130" Margin="0,0,15,0" Style="{StaticResource ModernComboBox}" Height="34" ToolTip="TCP/UDP Typ">
+                        <ComboBoxItem Content="TCP + UDP" IsSelected="True"/>
+                        <ComboBoxItem Content="Nur TCP"/>
+                        <ComboBoxItem Content="Nur UDP"/>
+                    </ComboBox>
+                    
+                    <TextBlock Text="Richtung:" FontSize="11" FontWeight="SemiBold" Foreground="#333333" VerticalAlignment="Center" Margin="0,0,8,0" MinWidth="70"/>
+                    <ComboBox x:Name="cmbDirection" Width="120" Margin="0,0,15,0" Style="{StaticResource ModernComboBox}" Height="34" ToolTip="Verbindungsrichtung">
+                        <ComboBoxItem Content="Beide" IsSelected="True"/>
+                        <ComboBoxItem Content="Eingehend"/>
+                        <ComboBoxItem Content="Ausgehend"/>
+                    </ComboBox>
+                    
+                    <TextBlock Text="Kategorie:" FontSize="11" FontWeight="SemiBold" Foreground="#333333" VerticalAlignment="Center" Margin="0,0,8,0" MinWidth="70"/>
+                    <ComboBox x:Name="cmbCategory" Width="155" Margin="0,0,15,0" Style="{StaticResource ModernComboBox}" Height="34" ToolTip="Nach Kategorie filtern">
+                        <ComboBoxItem Content="Alle Kategorien" IsSelected="True"/>
+                        <ComboBoxItem Content="Web Services"/>
+                        <ComboBoxItem Content="Email Services"/>
+                        <ComboBoxItem Content="Database Services"/>
+                        <ComboBoxItem Content="Directory Services"/>
+                        <ComboBoxItem Content="Remote Access"/>
+                        <ComboBoxItem Content="File Services"/>
+                        <ComboBoxItem Content="Monitoring"/>
+                        <ComboBoxItem Content="Virtualization"/>
+                    </ComboBox>
+                    
+                    <TextBlock Text="Service:" FontSize="11" FontWeight="SemiBold" Foreground="#333333" VerticalAlignment="Center" Margin="0,0,8,0" MinWidth="60"/>
+                    <ComboBox x:Name="cmbProtocol" Width="145" Margin="0,0,15,0" Style="{StaticResource ModernComboBox}" Height="34" ToolTip="Nach Protokoll filtern">
+                        <ComboBoxItem Content="Alle" IsSelected="True"/>
+                        <ComboBoxItem Content="HTTP"/>
+                        <ComboBoxItem Content="HTTPS"/>
+                        <ComboBoxItem Content="FTP"/>
+                        <ComboBoxItem Content="FTPS"/>
+                        <ComboBoxItem Content="SMTP"/>
+                        <ComboBoxItem Content="POP3"/>
+                        <ComboBoxItem Content="IMAP"/>
+                        <ComboBoxItem Content="DNS"/>
+                        <ComboBoxItem Content="DHCP"/>
+                        <ComboBoxItem Content="LDAP"/>
+                        <ComboBoxItem Content="LDAPS"/>
+                        <ComboBoxItem Content="SSH"/>
+                        <ComboBoxItem Content="Telnet"/>
+                        <ComboBoxItem Content="RDP"/>
+                        <ComboBoxItem Content="SMB/CIFS"/>
+                        <ComboBoxItem Content="NFS"/>
+                        <ComboBoxItem Content="SNMP"/>
+                        <ComboBoxItem Content="NTP"/>
+                        <ComboBoxItem Content="Kerberos"/>
+                        <ComboBoxItem Content="WinRM"/>
+                        <ComboBoxItem Content="PowerShell"/>
+                        <ComboBoxItem Content="SQL Server"/>
+                        <ComboBoxItem Content="MySQL"/>
+                        <ComboBoxItem Content="PostgreSQL"/>
+                        <ComboBoxItem Content="Oracle"/>
+                        <ComboBoxItem Content="MongoDB"/>
+                        <ComboBoxItem Content="Redis"/>
+                        <ComboBoxItem Content="VNC"/>
+                        <ComboBoxItem Content="TeamViewer"/>
+                        <ComboBoxItem Content="Syslog"/>
+                        <ComboBoxItem Content="RADIUS"/>
+                        <ComboBoxItem Content="TACACS+"/>
+                        <ComboBoxItem Content="NetBIOS"/>
+                        <ComboBoxItem Content="AD Replication"/>
+                        <ComboBoxItem Content="Exchange"/>
+                        <ComboBoxItem Content="Hyper-V"/>
+                        <ComboBoxItem Content="VMware"/>
+                    </ComboBox>
+                    
+                    <CheckBox x:Name="chkShowProcessInfo" Content="📋 Prozessinfo" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="False" Style="{StaticResource ModernCheckBox}" ToolTip="Prozessinformationen anzeigen"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- DataGrid -->
+        <DataGrid x:Name="dgConnections" Grid.Row="3" AutoGenerateColumns="False" IsReadOnly="True" 
+                 RowStyle="{StaticResource ColoredDataGridRowStyle}" 
+                 Style="{StaticResource ModernDataGrid}"
+                 ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                 AlternationCount="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Typ" Binding="{Binding Type}" Width="60"/>
-                <DataGridTextColumn Header="Lokale Adresse" Binding="{Binding LocalAddress}" Width="*"/>
-                <DataGridTextColumn Header="Lokaler Port" Binding="{Binding LocalPort}" Width="80"/>
-                <DataGridTextColumn Header="Remote Adresse" Binding="{Binding RemoteAddress}" Width="*"/>
-                <DataGridTextColumn Header="Remote Port" Binding="{Binding RemotePort}" Width="80"/>
-                <DataGridTextColumn Header="Remote Hostname" Binding="{Binding RemoteHostname}" Width="*"/>
+                <DataGridTextColumn Header="Typ" Binding="{Binding Type}" Width="50"/>
+                <DataGridTextColumn Header="Lokale Adresse" Binding="{Binding LocalAddress}" Width="140"/>
+                <DataGridTextColumn Header="Lokaler Port" Binding="{Binding LocalPort}" Width="90"/>
+                <DataGridTextColumn Header="Remote Adresse" Binding="{Binding RemoteAddress}" Width="140"/>
+                <DataGridTextColumn Header="Remote Port" Binding="{Binding RemotePort}" Width="90"/>
+                <DataGridTextColumn Header="Remote Hostname" Binding="{Binding RemoteHostname}" Width="*" MinWidth="140"/>
                 <DataGridTextColumn Header="Status" Binding="{Binding State}" Width="80"/>
                 <DataGridTextColumn x:Name="dgColProcessID" Header="Prozess ID" Binding="{Binding OwningProcess}" Width="80"/>
-                <DataGridTextColumn x:Name="dgColProcessName" Header="Prozess Name" Binding="{Binding ProcessName}" Width="120"/>
-                <DataGridTextColumn Header="Kategorie" Binding="{Binding CategoryName}" Width="120"/>
+                <DataGridTextColumn x:Name="dgColProcessName" Header="Prozess Name" Binding="{Binding ProcessName}" Width="150"/>
+                <DataGridTextColumn Header="Kategorie" Binding="{Binding CategoryName}" Width="130"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBox x:Name="txtStatus" Grid.Row="2" Height="80" Margin="0,10,0,10" IsReadOnly="True" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" Visibility="Visible"/>
+        <!-- Status Bar -->
+        <Border Grid.Row="4" Background="#F3F3F3" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="8,8,8,8" Margin="-12,8,-12,0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Status:" FontWeight="SemiBold" Foreground="#333333" Margin="0,0,8,0" FontFamily="Segoe UI" FontSize="11"/>
+                <TextBlock x:Name="txtStatus" Text="Bereit" Foreground="#666666" FontFamily="Segoe UI" FontSize="11"/>
+            </StackPanel>
+        </Border>
 
         <!-- Footer -->
-        <Border Grid.Row="3" Background="#F0F0F0" BorderBrush="#CCCCCC" BorderThickness="0,1,0,0" Padding="10,5">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                <TextBlock Text="easyConnections V0.0.3 - Network Connections Monitor (Admin Edition) - Mit farblicher Kategorie-Trennung" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                <TextBlock FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0">
-                    <Run Text="Copyright 2025 | Autor: Andreas Hepp | "/>
-                    <Hyperlink x:Name="linkPhinit" NavigateUri="https://www.phinit.de" Foreground="#0078D4">www.phinit.de</Hyperlink>
-                    <Run Text=" / "/>
-                    <Hyperlink x:Name="linkPsscripts" NavigateUri="https://www.psscripts.de" Foreground="#0078D4">www.psscripts.de</Hyperlink>
-                </TextBlock>
-            </StackPanel>
+        <Border Grid.Row="5" Background="#FAFAFA" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="8,6,8,6" Margin="-12,8,-12,-12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="easyConnections v0.0.3 • Network Monitor • B2B Edition" 
+                          Foreground="#999999" FontSize="10" FontFamily="Segoe UI" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="Powered by Andreas Hepp | www.phinit.de" Foreground="#0078D4" FontSize="10" FontWeight="SemiBold" FontFamily="Segoe UI"/>
+            </Grid>
         </Border>
     </Grid>
 </Window>
@@ -216,8 +465,10 @@ $dgConnections = $window.FindName("dgConnections")
 $dgColProcessID = $window.FindName("dgColProcessID")
 $dgColProcessName = $window.FindName("dgColProcessName")
 $txtStatus = $window.FindName("txtStatus")
-$linkPhinit = $window.FindName("linkPhinit")
-$linkPsscripts = $window.FindName("linkPsscripts")
+$cmbPresets = $window.FindName("cmbPresets")
+$btnLoadPreset = $window.FindName("btnLoadPreset")
+$btnSavePreset = $window.FindName("btnSavePreset")
+$btnDeletePreset = $window.FindName("btnDeletePreset")
 
 # Global variables for Recording Feature
 $Global:RecordingActive = $false
@@ -227,6 +478,10 @@ $Global:RecordedConnectionsHash = @{}
 $Global:ProcessCache = @{}
 $Global:RecordingStartTime = $null
 $Global:RecordingCategory = "Alle Kategorien"
+
+# Preset Storage
+$Global:PresetsFile = "$PSScriptRoot\presets.json"
+$Global:FilterPresets = @{}
 
 # Protocol port mappings
 $protocolPorts = @{
@@ -404,21 +659,47 @@ function Get-NetworkConnections {
         [string]$tcpUdpType = "TCP + UDP"
     )
 
-    # Get TCP connections
-    $tcpConnections = Get-NetTCPConnection | Select-Object @{Name="Type";Expression={"TCP"}}, LocalAddress, LocalPort, RemoteAddress, RemotePort, State, OwningProcess, @{Name="ProcessName";Expression={""}}, @{Name="RemoteHostname";Expression={""}}, @{Name="CategoryName";Expression={""}}, @{Name="CategoryColor";Expression={""}}
-
-    # Get UDP endpoints
-    $udpConnections = Get-NetUDPEndpoint | Select-Object @{Name="Type";Expression={"UDP"}}, @{Name="LocalAddress";Expression={$_.LocalAddress}}, @{Name="LocalPort";Expression={$_.LocalPort}}, @{Name="RemoteAddress";Expression={"N/A"}}, @{Name="RemotePort";Expression={"N/A"}}, @{Name="State";Expression={"Listen"}}, @{Name="OwningProcess";Expression={$_.OwningProcess}}, @{Name="ProcessName";Expression={""}}, @{Name="RemoteHostname";Expression={"N/A"}}, @{Name="CategoryName";Expression={""}}, @{Name="CategoryColor";Expression={""}}
-
-    # Filter by TCP/UDP type first
-    if ($tcpUdpType -eq "Nur TCP") {
-        $connections = $tcpConnections
-    } elseif ($tcpUdpType -eq "Nur UDP") {
-        $connections = $udpConnections
-    } else {
-        # "TCP + UDP"
-        $connections = $tcpConnections + $udpConnections
+    # Get TCP connections - convert to PSCustomObject
+    $tcpConnections = @()
+    if ($tcpUdpType -ne "Nur UDP") {
+        $tcpConnections = Get-NetTCPConnection | ForEach-Object {
+            [PSCustomObject]@{
+                Type = "TCP"
+                LocalAddress = $_.LocalAddress
+                LocalPort = $_.LocalPort
+                RemoteAddress = $_.RemoteAddress
+                RemotePort = $_.RemotePort
+                State = $_.State
+                OwningProcess = $_.OwningProcess
+                ProcessName = ""
+                RemoteHostname = ""
+                CategoryName = ""
+                CategoryColor = ""
+            }
+        }
     }
+
+    # Get UDP endpoints - convert to PSCustomObject
+    $udpConnections = @()
+    if ($tcpUdpType -ne "Nur TCP") {
+        $udpConnections = Get-NetUDPEndpoint | ForEach-Object {
+            [PSCustomObject]@{
+                Type = "UDP"
+                LocalAddress = $_.LocalAddress
+                LocalPort = $_.LocalPort
+                RemoteAddress = "N/A"
+                RemotePort = "N/A"
+                State = "Listen"
+                OwningProcess = $_.OwningProcess
+                ProcessName = ""
+                RemoteHostname = "N/A"
+                CategoryName = ""
+                CategoryColor = ""
+            }
+        }
+    }
+
+    $connections = @($tcpConnections) + @($udpConnections)
 
     # Filter by network type (Private/Public/All)
     if ($networkType -ne "Alle Netzwerke") {
@@ -524,6 +805,15 @@ function Start-ConnectionRecording {
         $networkType = $cmbNetworkType.SelectedItem.Content
         $tcpUdpType = $cmbTCPUDP.SelectedItem.Content
         $connections = Get-NetworkConnections -protocol $selectedProtocol -direction $selectedDirection -category $selectedCategory -includeProcessInfo $showProcessInfo -networkType $networkType -tcpUdpType $tcpUdpType
+        
+        # Ensure connections is always an array
+        if ($connections -is [System.Management.Automation.PSCustomObject]) {
+            $connections = @($connections)
+        } elseif ($null -eq $connections) {
+            $connections = @()
+        }
+        
+        $dgConnections.ItemsSource = [System.Collections.ArrayList]@($connections)
         
         foreach ($conn in $connections) {
             $conn | Add-Member -MemberType NoteProperty -Name "RecordingTime" -Value (Get-Date) -Force
@@ -804,7 +1094,15 @@ $btnRefresh.Add_Click({
         $tcpUdpType = $cmbTCPUDP.SelectedItem.Content
         
         $connections = Get-NetworkConnections -protocol $selectedProtocol -direction $selectedDirection -category $selectedCategory -includeProcessInfo $showProcessInfo -networkType $networkType -tcpUdpType $tcpUdpType
-        $dgConnections.ItemsSource = $connections
+        
+        # Ensure connections is always an array
+        if ($connections -is [System.Management.Automation.PSCustomObject]) {
+            $connections = @($connections)
+        } elseif ($null -eq $connections) {
+            $connections = @()
+        }
+        
+        $dgConnections.ItemsSource = [System.Collections.ArrayList]@($connections)
         
         $txtStatus.Text = "Verbindungen geladen: $($connections.Count) gefunden | Protokoll: $selectedProtocol | Richtung: $selectedDirection | Kategorie: $selectedCategory | Netzwerk: $networkType | TCP/UDP: $tcpUdpType"
     } catch {
@@ -830,23 +1128,6 @@ $btnStartRecording.Add_Click({
     }
 })
 
-# Hyperlink event handlers
-$linkPhinit.Add_Click({
-    try {
-        Start-Process "https://www.phinit.de"
-    } catch {
-        [System.Diagnostics.Process]::Start("https://www.phinit.de")
-    }
-})
-
-$linkPsscripts.Add_Click({
-    try {
-        Start-Process "https://www.psscripts.de"
-    } catch {
-        [System.Diagnostics.Process]::Start("https://www.psscripts.de")
-    }
-})
-
 # Export HTML button event
 $btnExportHTML.Add_Click({
     if ($dgConnections.ItemsSource.Count -eq 0) {
@@ -861,19 +1142,233 @@ $btnExportHTML.Add_Click({
     Export-HTMLReport -connections $connections -protocol $selectedProtocol -direction $selectedDirection -category $selectedCategory
 })
 
-# Window closing event
-$window.add_Closing({
-    if ($Global:RecordingActive) {
-        Stop-ConnectionRecording
+# Preset Functions
+function Import-FilterPresets {
+    # Initialize with default presets
+    $defaultPresets = @{
+        "Web-Debugging" = @{
+            Protocol = "HTTP"
+            Direction = "Beide"
+            Category = "Web Services"
+            NetworkType = "Alle Netzwerke"
+            TCPUDPType = "Nur TCP"
+            ProcessInfo = $true
+        }
+        "Datenbank-Monitor" = @{
+            Protocol = "Alle"
+            Direction = "Beide"
+            Category = "Database Services"
+            NetworkType = "Alle Netzwerke"
+            TCPUDPType = "Nur TCP"
+            ProcessInfo = $true
+        }
+        "Security-Audit" = @{
+            Protocol = "Alle"
+            Direction = "Beide"
+            Category = "Alle Kategorien"
+            NetworkType = "Nur Public"
+            TCPUDPType = "Nur TCP"
+            ProcessInfo = $true
+        }
+        "Interne Services" = @{
+            Protocol = "Alle"
+            Direction = "Beide"
+            Category = "Alle Kategorien"
+            NetworkType = "Nur Private"
+            TCPUDPType = "Nur TCP"
+            ProcessInfo = $true
+        }
+        "Externe Verbindungen" = @{
+            Protocol = "Alle"
+            Direction = "Beide"
+            Category = "Alle Kategorien"
+            NetworkType = "Nur Public"
+            TCPUDPType = "TCP + UDP"
+            ProcessInfo = $true
+        }
+        "DNS Monitoring" = @{
+            Protocol = "DNS"
+            Direction = "Beide"
+            Category = "Monitoring"
+            NetworkType = "Alle Netzwerke"
+            TCPUDPType = "Nur UDP"
+            ProcessInfo = $true
+        }
+        "Email Services" = @{
+            Protocol = "SMTP"
+            Direction = "Beide"
+            Category = "Email Services"
+            NetworkType = "Alle Netzwerke"
+            TCPUDPType = "Nur TCP"
+            ProcessInfo = $true
+        }
+    }
+    
+    # Load saved presets from JSON file
+    if (Test-Path $Global:PresetsFile) {
+        try {
+            $savedPresets = Get-Content $Global:PresetsFile | ConvertFrom-Json -AsHashtable
+            
+            # Start with default presets
+            $Global:FilterPresets = [hashtable]$defaultPresets
+            
+            # Add or override with saved presets (custom user presets)
+            foreach ($key in $savedPresets.Keys) {
+                $Global:FilterPresets[$key] = $savedPresets[$key]
+            }
+        } catch {
+            # If JSON loading fails, use defaults and save them
+            $Global:FilterPresets = [hashtable]$defaultPresets
+            Export-FilterPresets
+        }
+    } else {
+        # Use defaults and save them
+        $Global:FilterPresets = [hashtable]$defaultPresets
+        Export-FilterPresets
+    }
+}
+
+function Export-FilterPresets {
+    $Global:FilterPresets | ConvertTo-Json | Out-File -FilePath $Global:PresetsFile -Encoding UTF8
+}
+
+function Get-CurrentFilterState {
+    return @{
+        Protocol = $cmbProtocol.SelectedItem.Content
+        Direction = $cmbDirection.SelectedItem.Content
+        Category = $cmbCategory.SelectedItem.Content
+        NetworkType = $cmbNetworkType.SelectedItem.Content
+        TCPUDPType = $cmbTCPUDP.SelectedItem.Content
+        ProcessInfo = $chkShowProcessInfo.IsChecked
+    }
+}
+
+function Set-FilterPreset {
+    param([hashtable]$preset)
+    
+    # Apply preset values to UI
+    for ($i = 0; $i -lt $cmbProtocol.Items.Count; $i++) {
+        if ($cmbProtocol.Items[$i].Content -eq $preset.Protocol) {
+            $cmbProtocol.SelectedIndex = $i
+            break
+        }
+    }
+    for ($i = 0; $i -lt $cmbDirection.Items.Count; $i++) {
+        if ($cmbDirection.Items[$i].Content -eq $preset.Direction) {
+            $cmbDirection.SelectedIndex = $i
+            break
+        }
+    }
+    for ($i = 0; $i -lt $cmbCategory.Items.Count; $i++) {
+        if ($cmbCategory.Items[$i].Content -eq $preset.Category) {
+            $cmbCategory.SelectedIndex = $i
+            break
+        }
+    }
+    for ($i = 0; $i -lt $cmbNetworkType.Items.Count; $i++) {
+        if ($cmbNetworkType.Items[$i].Content -eq $preset.NetworkType) {
+            $cmbNetworkType.SelectedIndex = $i
+            break
+        }
+    }
+    for ($i = 0; $i -lt $cmbTCPUDP.Items.Count; $i++) {
+        if ($cmbTCPUDP.Items[$i].Content -eq $preset.TCPUDPType) {
+            $cmbTCPUDP.SelectedIndex = $i
+            break
+        }
+    }
+    $chkShowProcessInfo.IsChecked = $preset.ProcessInfo
+    
+    # Automatically refresh with new filters
+    $btnRefresh.RaiseEvent([System.Windows.RoutedEventArgs]::new([System.Windows.Controls.Button]::ClickEvent))
+}
+
+# Load saved presets
+Import-FilterPresets
+
+# Function to populate presets in ComboBox
+function Update-PresetsComboBox {
+    # Clear existing items except "-- Neues Preset --"
+    while ($cmbPresets.Items.Count -gt 1) {
+        $cmbPresets.Items.RemoveAt($cmbPresets.Items.Count - 1)
+    }
+    
+    # Add all presets to ComboBox
+    foreach ($presetName in $Global:FilterPresets.Keys | Sort-Object) {
+        $item = New-Object System.Windows.Controls.ComboBoxItem
+        $item.Content = $presetName
+        $cmbPresets.Items.Add($item) | Out-Null
+    }
+}
+
+# Populate presets in ComboBox
+Update-PresetsComboBox
+
+# Preset Button Event Handlers
+$btnLoadPreset.Add_Click({
+    $selectedPresetName = $cmbPresets.SelectedItem.Content
+    
+    if ($selectedPresetName -eq "-- Neues Preset --") {
+        [System.Windows.MessageBox]::Show("Bitte wählen Sie ein Preset aus der Liste.", "Information", "OK", "Information")
+        return
+    }
+    
+    if ($Global:FilterPresets.ContainsKey($selectedPresetName)) {
+        Set-FilterPreset -preset $Global:FilterPresets[$selectedPresetName]
+        $txtStatus.Text = "Preset geladen: $selectedPresetName"
+    } else {
+        [System.Windows.MessageBox]::Show("Preset '$selectedPresetName' nicht gefunden.", "Fehler", "OK", "Error")
     }
 })
 
-# LAZY LOADING: Keine automatische Initialisierung beim Start - DataGrid bleibt leer
-$dgConnections.ItemsSource = @()
-$txtStatus.Text = "Bereit. Klicken Sie auf 'Aktualisieren' um Verbindungen zu laden oder starten Sie eine Aufzeichnung."
+$btnSavePreset.Add_Click({
+    [System.Windows.Input.InputDialog]::Show("Preset-Name:", "Neues Preset speichern")
+    
+    $inputBox = [Microsoft.VisualBasic.Interaction]::InputBox("Geben Sie einen Namen für das Preset ein:", "Preset speichern")
+    
+    if ([string]::IsNullOrWhiteSpace($inputBox)) {
+        return
+    }
+    
+    $currentFilters = Get-CurrentFilterState
+    $Global:FilterPresets[$inputBox] = $currentFilters
+    Export-FilterPresets
+    
+    # Add to ComboBox
+    if (-not ($cmbPresets.Items | Where-Object { $_.Content -eq $inputBox })) {
+        $cmbPresets.Items.Add((New-Object System.Windows.Controls.ComboBoxItem -Property @{ Content = $inputBox }))
+    }
+    
+    $txtStatus.Text = "Preset gespeichert: $inputBox"
+    [System.Windows.MessageBox]::Show("Preset '$inputBox' wurde gespeichert.", "Erfolg", "OK", "Information")
+})
 
-# Initialize process columns visibility (hidden by default)
-Update-ProcessColumnsVisibility -showProcessInfo $false
+$btnDeletePreset.Add_Click({
+    $selectedPresetName = $cmbPresets.SelectedItem.Content
+    
+    if ($selectedPresetName -eq "-- Neues Preset --") {
+        [System.Windows.MessageBox]::Show("Bitte wählen Sie ein Preset zum Löschen aus.", "Information", "OK", "Information")
+        return
+    }
+    
+    $result = [System.Windows.MessageBox]::Show("Möchten Sie das Preset '$selectedPresetName' wirklich löschen?", "Bestätigung", "YesNo", "Question")
+    
+    if ($result -eq "Yes") {
+        $Global:FilterPresets.Remove($selectedPresetName)
+        Export-FilterPresets
+        
+        # Remove from ComboBox
+        for ($i = 0; $i -lt $cmbPresets.Items.Count; $i++) {
+            if ($cmbPresets.Items[$i].Content -eq $selectedPresetName) {
+                $cmbPresets.Items.RemoveAt($i)
+                break
+            }
+        }
+        
+        $cmbPresets.SelectedIndex = 0
+        $txtStatus.Text = "Preset gelöscht: $selectedPresetName"
+    }
+})
 
 # Show window
 $window.ShowDialog() | Out-Null
